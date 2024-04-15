@@ -1,0 +1,57 @@
+# YAML file to specify the configuration of the DACs service and deployment
+## Author: Huthayfa Patel
+
+# Details DACS service config
+apiVersion: v1
+kind: Service # specifies as service
+metadata:
+  name: webhook-server
+  namespace: dissertation
+spec:
+  selector:
+    app: webhook-server
+  ports:
+    - port: 443 # specifies container port
+      targetPort: webhook-api
+--- # to break between two yamls
+# Details DACs deployment config
+apiVersion: apps/v1
+kind: Deployment # specifies as deployment 
+metadata:
+  name: webhook-server
+  namespace: dissertation
+  labels:
+    app: webhook-server
+spec:
+  replicas: 3 # specifies 3 pods
+  selector:
+    matchLabels:
+      app: webhook-server
+  template:
+    metadata:
+      labels:
+        app: webhook-server
+    spec:
+      containers:
+        - name: server
+          image: admission-controller:latest # specifies use of docker image created from Dockerfile script
+          imagePullPolicy: Never
+          # Sets container env vars
+          env:
+            - name: WEBHOOK_PORT
+              value: "8443"
+            - name: TLS_DIR
+              value: /run/secrets/tls
+          ports:
+            - containerPort: 8443
+              name: webhook-api
+          volumeMounts:
+            - name: webhook-tls-certs
+              mountPath: /run/secrets/tls
+              readOnly: true
+      volumes:
+        - name: webhook-tls-certs
+        # Uses TLS cert secret
+          secret:
+            secretName: webhook-server-tls
+

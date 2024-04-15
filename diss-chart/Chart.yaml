@@ -1,0 +1,8 @@
+# YAML file to describe the Helm chart
+## Author: Huthayfa Patel
+
+apiVersion: v2
+name: diss-chart
+description: Dissertation Helm Chart
+version: 0.1.0
+

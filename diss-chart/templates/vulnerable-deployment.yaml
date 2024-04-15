@@ -1,0 +1,29 @@
+# YAML file to specify the configuration of the vulnerable deployment
+## Author: Huthayfa Patel
+
+apiVersion: apps/v1
+kind: Deployment # specifies as deployment
+metadata:
+  name: vulnerable-deployment
+spec:
+  replicas: 3 # specifies 3 pods
+  selector:
+    matchLabels:
+      app: vulnerable-deployment
+  template:
+    metadata:
+      labels:
+        app: vulnerable-deployment
+    spec:
+      restartPolicy: Always
+      containers:
+      - name: vulnerable-1
+        image: {{ .Values.vulnerableDeployment.baseImage }} # specified in values.yaml
+        command: ["sleep", "infinity"] # so the pod does not die on completion
+      - name: vulnerable-2
+        image: {{ .Values.vulnerableDeployment.baseImage }} # specified in values.yaml
+        command: ["sleep", "infinity"] # so the pod does not die on completion
+      - name: vulnerable-3
+        image: {{ .Values.vulnerableDeployment.baseImage }} # specified in values.yaml
+        command: ["sleep", "infinity"] # so the pod does not die on completion
+

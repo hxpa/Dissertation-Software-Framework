@@ -1,0 +1,29 @@
+# YAML file to specify the configuration of the protected deployment
+## Author: Huthayfa Patel
+
+apiVersion: apps/v1
+kind: Deployment # specifies as deployment
+metadata:
+  name: protected-deployment
+spec:
+  replicas: 3 # specifies 3 pods
+  selector:
+    matchLabels:
+      app: protected-deployment
+  template:
+    metadata:
+      labels:
+        app: protected-deployment
+    spec:
+      restartPolicy: Always
+      containers:
+      - name: protected-1
+        image: {{ .Values.protectedDeployment.baseImage }} # specified in values.yaml
+        command: ["sleep", "infinity"] # so the pod does not die on completion
+      - name: protected-2
+        image: {{ .Values.protectedDeployment.baseImage }} # specified in values.yaml
+        command: ["sleep", "infinity"] # so the pod does not die on completion
+      - name: protected-3
+        image: {{ .Values.protectedDeployment.baseImage }} # specified in values.yaml
+        command: ["sleep", "infinity"] # so the pod does not die on completion
+
